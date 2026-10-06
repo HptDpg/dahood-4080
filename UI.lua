@@ -13,6 +13,27 @@ local TXT   = Color3.fromRGB(235, 235, 240)
 local DIM   = Color3.fromRGB(140, 140, 150)
 local WHITE = Color3.fromRGB(246, 246, 250)
 
+local function mk(class, props, parent)
+    local o = Instance.new(class)
+    for k, v in pairs(props) do
+        if k ~= "Corner" and k ~= "Stroke" then pcall(function() o[k] = v end) end
+    end
+    if props.Corner then
+        local c = Instance.new("UICorner")
+        c.CornerRadius = UDim.new(0, props.Corner)
+        c.Parent = o
+    end
+    if props.Stroke then
+        local s = Instance.new("UIStroke")
+        s.Color = LINE
+        s.Thickness = 1
+        s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+        s.Parent = o
+    end
+    o.Parent = parent
+    return o
+end
+
 local UIS = game:GetService("UserInputService")
 local S = {}
 local popups = {}
@@ -180,27 +201,6 @@ local function slider(col, label, key, default, min, max, fmt, order)
         if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
     end)
     ref()
-end
-
-local function mk(class, props, parent)
-    local o = Instance.new(class)
-    for k, v in pairs(props) do
-        if k ~= "Corner" and k ~= "Stroke" then pcall(function() o[k] = v end) end
-    end
-    if props.Corner then
-        local c = Instance.new("UICorner")
-        c.CornerRadius = UDim.new(0, props.Corner)
-        c.Parent = o
-    end
-    if props.Stroke then
-        local s = Instance.new("UIStroke")
-        s.Color = LINE
-        s.Thickness = 1
-        s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-        s.Parent = o
-    end
-    o.Parent = parent
-    return o
 end
 
 local CG = game:GetService("CoreGui")
