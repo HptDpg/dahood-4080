@@ -1,7 +1,9 @@
 -- 4080 DaHood Hub v4.0.8.0 | SINGLE FILE BUILD
 -- paste this whole file into your executor. no readfile needed.
+getgenv().DH4080 = getgenv().DH4080 or {}
 
 -- ==================== Config.lua ====================
+do
 -- 4080 DaHood Hub | Config.lua
 -- EVERY setting lives here. UI reads/writes live. Flags keyed for cfg save.
 getgenv().DH4080 = getgenv().DH4080 or {}
@@ -145,10 +147,11 @@ C.Settings = {
 }
 
 getgenv().DH4080.Config = C
-return C
 
+end
 
 -- ==================== Utils.lua ====================
+do
 -- 4080 DaHood Hub | Utils.lua
 -- Services, DaHood-aware checks (knocked/crew/forcefield), targeting, math.
 getgenv().DH4080 = getgenv().DH4080 or {}
@@ -185,7 +188,6 @@ function U.Knocked(pl)
     if c:FindFirstChild("GRABBING_CONSTRAINT") then return true end
     local h = U.Hum(pl)
     if h and h.Health <= 2 then return true end
-    return false
 end
 function U.Grabbed(pl)
     local c = U.Char(pl)
@@ -231,7 +233,6 @@ function U.VisiblePart(pl, partName)
     if not part then return false end
     local camPos = U.Camera.CFrame.Position
     local ok = U.WallCheck(camPos, part.Position)
-    return ok
 end
 function U.ScreenPoint(worldPos)
     local v, on = U.Camera:WorldToViewportPoint(worldPos)
@@ -274,7 +275,6 @@ function U.ResolvePart(pl, mode)
                 end
             end
         end
-        return best
     elseif mode == "Random" then
         local t = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"}
         return t[math.random(1, #t)]
@@ -306,7 +306,6 @@ function U.Pool(o)
             end
         end
     end
-    return out
 end
 -- pick target inside FOV by mode
 function U.PickTarget(o)
@@ -340,7 +339,6 @@ function U.PickTarget(o)
         end
     end
     if o.TargetMode == "LowestHP" and lowHP then return lowHP end
-    return best
 end
 function U.Click() -- synthetic LMB for triggerbot
     VIM:SendMouseButtonEvent(0, 0, 0, true, game, 0)
@@ -363,14 +361,14 @@ function U.AmmoLeft()
     local ok, v = pcall(function() return t:GetAttribute("Ammo") or t:FindFirstChild("Ammo") end)
     if ok and typeof(v) == "number" then return v end
     if ok and typeof(v) == "Instance" and v.Value ~= nil then return v.Value end
-    return 99
 end
 
 getgenv().DH4080.Utils = U
-return U
 
+end
 
 -- ==================== UILib.lua ====================
+do
 -- 4080 DaHood Hub | UILib.lua
 -- Custom monochrome UI kit. Black & white, no external deps.
 -- Controls: Toggle(+dots options), Slider, Dropdown, Color, Keybind, Button, Label.
@@ -411,7 +409,6 @@ function LIB.mk(class, props, parent)
         p.PaddingTop = UDim.new(0,4) p.PaddingBottom = UDim.new(0,4) p.Parent = o
     end
     o.Parent = parent
-    return o
 end
 
 function LIB.ClosePopups(except)
@@ -490,7 +487,6 @@ function LIB.Tabs(main, names, y0)
             LIB.ClosePopups()
         end)
     end
-    return pages
 end
 
 function LIB.Section(parent, title)
@@ -498,7 +494,6 @@ function LIB.Section(parent, title)
     LIB.mk("TextLabel", {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 1,
         Text = "— " .. title .. " —", TextColor3 = DIM, Font = Enum.Font.GothamBold,
         TextSize = 11}, s)
-    return s
 end
 
 -- ===== TOGGLE + DOTS =====
@@ -553,7 +548,6 @@ function LIB.Toggle(parent, label, get, set, opts)
             pop.Visible = v
         end)
     end
-    return ref
 end
 
 function LIB.MiniToggle(parent, label, get, set, pos)
@@ -676,7 +670,6 @@ function LIB.Dropdown(parent, label, options, get, set, pos, wide)
         set(options[i]) ref()
     end)
     ref()
-    return ref
 end
 
 -- ===== COLOR (grayscale-friendly swatches + custom) =====
@@ -778,7 +771,6 @@ function LIB.Button(parent, text, cb, h)
         BackgroundColor3 = ROW, TextColor3 = TXT, Font = Enum.Font.GothamBold, TextSize = 13,
         Text = text, Corner = 6, Stroke = LINE}, parent)
     b.MouseButton1Click:Connect(function() cb() end)
-    return b
 end
 
 function LIB.Notify(gui, text)
@@ -792,10 +784,11 @@ function LIB.Notify(gui, text)
 end
 
 getgenv().DH4080.UILib = LIB
-return LIB
 
+end
 
 -- ==================== Aimbot.lua ====================
+do
 -- 4080 DaHood Hub | Aimbot.lua
 -- Legit aimbot: hold-key, FOV-gated, velocity prediction, smoothing,
 -- sticky lock, second-stage tighten, humanize shake, wall/knocked/ff checks.
@@ -857,7 +850,6 @@ function A.Validate()
         if C().Sticky and math.random() < C().Stickiness then return true end
         A.Lock = nil return false
     end
-    return true
 end
 
 function A.Tick()
@@ -941,10 +933,11 @@ function A.Bind()
 end
 
 BB.Aimbot = A
-return A
 
+end
 
 -- ==================== Trigger.lua ====================
+do
 -- 4080 DaHood Hub | Trigger.lua
 -- Triggerbot: when crosshair sits on target part inside FOV, auto-click.
 -- DelayMs = wait BEFORE 1st shot. ConsecutiveDelayMs = wait AFTER 1st shot
@@ -1006,7 +999,6 @@ function T.TargetUnderCross()
             end
         end
     end
-    return best
 end
 
 function T.Tick()
@@ -1073,10 +1065,11 @@ function T.Bind()
 end
 
 BB.Trigger = T
-return T
 
+end
 
 -- ==================== Silent.lua ====================
+do
 -- 4080 DaHood Hub | Silent.lua
 -- Silent aim via raycast hook: rewrites bullet ray destination to predicted
 -- target point. Method Raycast hooks game raycasts; Method Index hooks
@@ -1109,7 +1102,6 @@ function S.Point()
     if CC.KnockedCheck and UU.Knocked(t) then return nil end
     local partName = UU.ResolvePart(t, CC.TargetPart)
     local pt = UU.Predict(t, partName, CC.Prediction)
-    return pt
 end
 
 function S.Hook()
@@ -1159,7 +1151,6 @@ function S.Hook()
                         if k == "Target" and S.Target then
                             local c = U().Char(S.Target)
                             local p = c and (c:FindFirstChild("Head") or c:FindFirstChild("UpperTorso"))
-                            return p
                         end
                     end
                 end
@@ -1170,10 +1161,11 @@ function S.Hook()
 end
 
 BB.Silent = S
-return S
 
+end
 
 -- ==================== Rage.lua ====================
+do
 -- 4080 DaHood Hub | Rage.lua
 -- HVH rage kit: Orbit (circle victim, force them to miss), Spinbot,
 -- Jitter/AA (break enemy legit aa reads), RapidFire, NoRecoil,
@@ -1305,10 +1297,11 @@ function R.Tick(dt)
 end
 
 BB.Rage = R
-return R
 
+end
 
 -- ==================== Visuals.lua ====================
+do
 -- 4080 DaHood Hub | Visuals.lua
 -- Full ESP suite on Drawing API: Box(Full/Cornered+Fill), Health(Bar/Number/Both),
 -- Name, Distance, Skeleton, Chams, Tracer, HeadDot, Offscreen arrows.
@@ -1323,7 +1316,6 @@ local function U() return BB.Utils end
 local function D(kind, props)
     local o = Drawing.new(kind)
     for k, v in pairs(props or {}) do pcall(function() o[k] = v end) end
-    return o
 end
 
 function V.entry(pl)
@@ -1344,7 +1336,6 @@ function V.entry(pl)
         chamHl = nil,
     }
     V.Cache[pl] = e
-    return e
 end
 
 function V.hide(e)
@@ -1601,10 +1592,11 @@ function V.Cleanup()
 end
 
 BB.Visuals = V
-return V
 
+end
 
 -- ==================== World.lua ====================
+do
 -- 4080 DaHood Hub | World.lua
 -- Calm-world kit: custom skyboxes, fog, ambience/lighting, fullbright,
 -- gun chams, bullet tracers, hit effects + sounds.
@@ -1774,10 +1766,11 @@ function W.Restore()
 end
 
 BB.World = W
-return W
 
+end
 
 -- ==================== Movement.lua ====================
+do
 -- 4080 DaHood Hub | Movement.lua
 -- Speed (3 modes), Fly, Noclip, BunnyHop, InfiniteJump, NoSlow, NoFall,
 -- ClickTP, Infinite stamina.
@@ -1938,10 +1931,11 @@ function M.Tick(dt)
 end
 
 BB.Movement = M
-return M
 
+end
 
 -- ==================== Cfg.lua ====================
+do
 -- 4080 DaHood Hub | Cfg.lua
 -- JSON config save/load via writefile/readfile. Serializes plain tables only
 -- (KeyCodes/UserInputTypes stored as .Name strings, restored on load).
@@ -1960,9 +1954,7 @@ local function enc(v)
     if typeof(v) == "table" then
         local t = {}
         for k, x in pairs(v) do t[k] = enc(x) end
-        return t
     end
-    return v
 end
 local function dec(v)
     if typeof(v) == "table" then
@@ -1974,9 +1966,7 @@ local function dec(v)
         if v.__col then return Color3.fromRGB(v.__col[1], v.__col[2], v.__col[3]) end
         local t = {}
         for k, x in pairs(v) do t[k] = dec(x) end
-        return t
     end
-    return v
 end
 -- UserInputType isn't in Enum; store as string tag
 local function enc2(v)
@@ -1990,7 +1980,6 @@ local function deepCopy(t)
     if typeof(t) ~= "table" then return t end
     local o = {}
     for k, v in pairs(t) do o[k] = deepCopy(v) end
-    return o
 end
 
 local function merge(dst, src)
@@ -2041,7 +2030,6 @@ local function decodeCfg(t)
             local o = {}
             for k, v in pairs(x) do o[k] = untag(v) end
             if x.__key or x.__col then return dec(x) end
-            return o
         end
         return dec(x)
     end
@@ -2054,7 +2042,6 @@ function G.Save(name)
         -- KeyName strings ride along automatically (plain strings)
         writefile(G.Path(name), HS:JSONEncode(data))
     end)
-    return ok
 end
 
 function G.Load(name)
@@ -2063,14 +2050,14 @@ function G.Load(name)
         local data = decodeCfg(HS:JSONDecode(raw))
         merge(BB.Config, data)
     end)
-    return ok
 end
 
 BB.Cfg = G
-return G
 
+end
 
 -- ==================== UI.lua ====================
+do
 -- 4080 DaHood Hub | UI.lua
 -- Black & white multi-tab UI: RAGE / LEGIT / TRIGGER / VISUALS / WORLD / MOVE / CFG.
 -- Every major feature = Toggle + ⋯ dots popup (style dropdowns, fill, colors).
@@ -2419,10 +2406,11 @@ function UI.FovTick()
 end
 
 BB.UI = UI
-return UI
 
+end
 
 -- ==================== Init.lua ====================
+do
 -- 4080 DaHood Hub | Init.lua
 -- Boot: binds, builds UI, hooks silent, starts master loops, panic key.
 getgenv().DH4080 = getgenv().DH4080 or {}
@@ -2507,4 +2495,5 @@ end
 
 print("4080 DaHood Hub v" .. BB.Config.Version .. " live — stashed")
 
+end
 
