@@ -43,7 +43,7 @@ end
 
 local function closePopups(except)
     for _, p in ipairs(popups) do
-        if p ~= except and p.Parent then pcall(function() p.Visible = false) end
+        if p ~= except and p.Parent then pcall(function() p.Visible = false end) end
     end
 end
 
@@ -53,18 +53,18 @@ local ROW_O = 0 -- auto order counter helper (LayoutOrder via caller)
 local function section(col, title)
     local f = mk("Frame", {Size = UDim2.new(1,0,0,26), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     mk("TextLabel", {Size = UDim2.new(1,0,0,16), BackgroundTransparency = 1, Text = title,
         TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 12,
         TextXAlignment = Enum.TextXAlignment.Left}, f)
-    mk("Frame", {Size = UDim2.new(1,0,1,-16), Position = UDim2.new(0,0,0,17),
+    mk("Frame", {Size = UDim2.new(1,0,0,1), Position = UDim2.new(0,0,0,21),
         BackgroundColor3 = HAIR, BorderSizePixel = 0}, f)
 end
 
 local function toggle(col, label, key, default)
     local row = mk("Frame", {Size = UDim2.new(1,0,0,22), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     -- checkbox
     local cb = mk("Frame", {Size = UDim2.new(0,13,0,13), Position = UDim2.new(0,2,0.5,-6),
         BackgroundColor3 = BOX, BorderSizePixel = 0, Corner = 2, Stroke = true}, row)
@@ -93,14 +93,14 @@ local function toggle(col, label, key, default)
     end
     local hit = mk("TextButton", {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 1,
         Text = ""}, row)
-    hit.MouseButton1Click:Connect(function() S[key] = not val() ref() end)
+    hit.MouseButton1Click:Connect(function() S[key] = not val(); ref() end)
     ref()
 end
 
 local function dropdown(col, label, key, default, options)
     local wrap = mk("Frame", {Size = UDim2.new(1,0,0,40), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
         TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
@@ -120,10 +120,10 @@ local function dropdown(col, label, key, default, options)
         local ob = mk("TextButton", {Size = UDim2.new(1,-6,0,19), Position = UDim2.new(0,3,0,4+(i-1)*20),
             BackgroundColor3 = BOX, TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 11,
             Text = tostring(opt), Corner = 2}, list)
-        ob.MouseButton1Click:Connect(function() S[key] = opt ref() list.Visible = false end)
+        ob.MouseButton1Click:Connect(function() S[key] = opt; ref(); list.Visible = false end)
     end
     box.MouseButton1Click:Connect(function()
-        local v = not list.Visible closePopups(list) list.Visible = v
+        local v = not list.Visible; closePopups(list); list.Visible = v
     end)
     ref()
 end
@@ -132,7 +132,7 @@ local function slider(col, label, key, default, min, max, fmt)
     local f = fmt or function(v) return string.format("%.2f", v) end
     local wrap = mk("Frame", {Size = UDim2.new(1,0,0,40), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
         TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
@@ -152,10 +152,10 @@ local function slider(col, label, key, default, min, max, fmt)
     end
     local function apply(px)
         local t = math.clamp((px-bar.AbsolutePosition.X)/math.max(bar.AbsoluteSize.X,1),0,1)
-        S[key] = min+(max-min)*t ref()
+        S[key] = min+(max-min)*t; ref()
     end
     local dragging = false
-    bar.MouseButton1Down:Connect(function() dragging = true apply(UIS:GetMouseLocation().X) end)
+    bar.MouseButton1Down:Connect(function() dragging = true; apply(UIS:GetMouseLocation().X) end)
     UIS.InputChanged:Connect(function(i)
         if dragging and i.UserInputType == Enum.UserInputType.MouseMovement
             and UIS:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
@@ -171,7 +171,7 @@ end
 local function textbox(col, label, key, default, hint)
     local wrap = mk("Frame", {Size = UDim2.new(1,0,0,hint and 62 or 40), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
         TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
@@ -192,7 +192,7 @@ local function button(col, label, cb)
     local b = mk("TextButton", {Size = UDim2.new(1,0,0,24), BackgroundColor3 = BOX,
         TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 12, Text = label,
         Corner = 3, Stroke = true, LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
     b.MouseButton1Click:Connect(function() cb() end)
 end
 
@@ -201,7 +201,7 @@ local function note(col, text)
         Text = text, TextColor3 = DIM, Font = Enum.Font.Gotham, TextSize = 10,
         TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true,
         AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ROW_O}, col)
-    ROW_O += 1
+    ROW_O = ROW_O + 1
 end
 
 -- ===== WINDOW =====
