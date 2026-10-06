@@ -10,8 +10,8 @@ foreach ($f in $order) {
   $lines.Add('-- ==================== ' + $f + ' ====================')
   $lines.Add('do')
   $src = [IO.File]::ReadAllText((Join-Path (Get-Location) $f))
-  # strip module return lines (bare returns kill concatenated chunks)
-  $filtered = $src -split "`r?`n" | Where-Object { $_ -notmatch '^\s*return\s+\w+\s*$' }
+  # strip MODULE-level returns only (column 0). Indented function returns stay.
+  $filtered = $src -split "`r?`n" | Where-Object { $_ -notmatch '^return\s+\w+\s*$' }
   foreach ($l in $filtered) { $lines.Add($l) }
   $lines.Add('end')
 }

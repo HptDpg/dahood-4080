@@ -188,6 +188,7 @@ function U.Knocked(pl)
     if c:FindFirstChild("GRABBING_CONSTRAINT") then return true end
     local h = U.Hum(pl)
     if h and h.Health <= 2 then return true end
+    return false
 end
 function U.Grabbed(pl)
     local c = U.Char(pl)
@@ -233,6 +234,7 @@ function U.VisiblePart(pl, partName)
     if not part then return false end
     local camPos = U.Camera.CFrame.Position
     local ok = U.WallCheck(camPos, part.Position)
+    return ok
 end
 function U.ScreenPoint(worldPos)
     local v, on = U.Camera:WorldToViewportPoint(worldPos)
@@ -275,6 +277,7 @@ function U.ResolvePart(pl, mode)
                 end
             end
         end
+        return best
     elseif mode == "Random" then
         local t = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"}
         return t[math.random(1, #t)]
@@ -306,6 +309,7 @@ function U.Pool(o)
             end
         end
     end
+    return out
 end
 -- pick target inside FOV by mode
 function U.PickTarget(o)
@@ -339,6 +343,7 @@ function U.PickTarget(o)
         end
     end
     if o.TargetMode == "LowestHP" and lowHP then return lowHP end
+    return best
 end
 function U.Click() -- synthetic LMB for triggerbot
     VIM:SendMouseButtonEvent(0, 0, 0, true, game, 0)
@@ -361,6 +366,7 @@ function U.AmmoLeft()
     local ok, v = pcall(function() return t:GetAttribute("Ammo") or t:FindFirstChild("Ammo") end)
     if ok and typeof(v) == "number" then return v end
     if ok and typeof(v) == "Instance" and v.Value ~= nil then return v.Value end
+    return 99
 end
 
 getgenv().DH4080.Utils = U
@@ -409,6 +415,7 @@ function LIB.mk(class, props, parent)
         p.PaddingTop = UDim.new(0,4) p.PaddingBottom = UDim.new(0,4) p.Parent = o
     end
     o.Parent = parent
+    return o
 end
 
 function LIB.ClosePopups(except)
@@ -487,6 +494,7 @@ function LIB.Tabs(main, names, y0)
             LIB.ClosePopups()
         end)
     end
+    return pages
 end
 
 function LIB.Section(parent, title)
@@ -494,6 +502,7 @@ function LIB.Section(parent, title)
     LIB.mk("TextLabel", {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 1,
         Text = "— " .. title .. " —", TextColor3 = DIM, Font = Enum.Font.GothamBold,
         TextSize = 11}, s)
+    return s
 end
 
 -- ===== TOGGLE + DOTS =====
@@ -548,6 +557,7 @@ function LIB.Toggle(parent, label, get, set, opts)
             pop.Visible = v
         end)
     end
+    return ref
 end
 
 function LIB.MiniToggle(parent, label, get, set, pos)
@@ -670,6 +680,7 @@ function LIB.Dropdown(parent, label, options, get, set, pos, wide)
         set(options[i]) ref()
     end)
     ref()
+    return ref
 end
 
 -- ===== COLOR (grayscale-friendly swatches + custom) =====
@@ -771,6 +782,7 @@ function LIB.Button(parent, text, cb, h)
         BackgroundColor3 = ROW, TextColor3 = TXT, Font = Enum.Font.GothamBold, TextSize = 13,
         Text = text, Corner = 6, Stroke = LINE}, parent)
     b.MouseButton1Click:Connect(function() cb() end)
+    return b
 end
 
 function LIB.Notify(gui, text)
@@ -850,6 +862,7 @@ function A.Validate()
         if C().Sticky and math.random() < C().Stickiness then return true end
         A.Lock = nil return false
     end
+    return true
 end
 
 function A.Tick()
@@ -999,6 +1012,7 @@ function T.TargetUnderCross()
             end
         end
     end
+    return best
 end
 
 function T.Tick()
@@ -1102,6 +1116,7 @@ function S.Point()
     if CC.KnockedCheck and UU.Knocked(t) then return nil end
     local partName = UU.ResolvePart(t, CC.TargetPart)
     local pt = UU.Predict(t, partName, CC.Prediction)
+    return pt
 end
 
 function S.Hook()
@@ -1151,6 +1166,7 @@ function S.Hook()
                         if k == "Target" and S.Target then
                             local c = U().Char(S.Target)
                             local p = c and (c:FindFirstChild("Head") or c:FindFirstChild("UpperTorso"))
+                            return p
                         end
                     end
                 end
@@ -1316,6 +1332,7 @@ local function U() return BB.Utils end
 local function D(kind, props)
     local o = Drawing.new(kind)
     for k, v in pairs(props or {}) do pcall(function() o[k] = v end) end
+    return o
 end
 
 function V.entry(pl)
@@ -1336,6 +1353,7 @@ function V.entry(pl)
         chamHl = nil,
     }
     V.Cache[pl] = e
+    return e
 end
 
 function V.hide(e)
@@ -1954,7 +1972,9 @@ local function enc(v)
     if typeof(v) == "table" then
         local t = {}
         for k, x in pairs(v) do t[k] = enc(x) end
+        return t
     end
+    return v
 end
 local function dec(v)
     if typeof(v) == "table" then
@@ -1966,7 +1986,9 @@ local function dec(v)
         if v.__col then return Color3.fromRGB(v.__col[1], v.__col[2], v.__col[3]) end
         local t = {}
         for k, x in pairs(v) do t[k] = dec(x) end
+        return t
     end
+    return v
 end
 -- UserInputType isn't in Enum; store as string tag
 local function enc2(v)
@@ -1980,6 +2002,7 @@ local function deepCopy(t)
     if typeof(t) ~= "table" then return t end
     local o = {}
     for k, v in pairs(t) do o[k] = deepCopy(v) end
+    return o
 end
 
 local function merge(dst, src)
@@ -2030,6 +2053,7 @@ local function decodeCfg(t)
             local o = {}
             for k, v in pairs(x) do o[k] = untag(v) end
             if x.__key or x.__col then return dec(x) end
+            return o
         end
         return dec(x)
     end
@@ -2042,6 +2066,7 @@ function G.Save(name)
         -- KeyName strings ride along automatically (plain strings)
         writefile(G.Path(name), HS:JSONEncode(data))
     end)
+    return ok
 end
 
 function G.Load(name)
@@ -2050,6 +2075,7 @@ function G.Load(name)
         local data = decodeCfg(HS:JSONDecode(raw))
         merge(BB.Config, data)
     end)
+    return ok
 end
 
 BB.Cfg = G
