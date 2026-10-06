@@ -51,35 +51,35 @@ end
 local ROW_O = 0 -- auto order counter helper (LayoutOrder via caller)
 
 local function section(col, title)
-    local f = mk("Frame", {Size = UDim2.new(1,0,0,26), BackgroundTransparency = 1,
+    local f = mk("Frame", {Size = UDim2.new(1,0,0,32), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
-    mk("TextLabel", {Size = UDim2.new(1,0,0,16), BackgroundTransparency = 1, Text = title,
-        TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 12,
+    mk("TextLabel", {Size = UDim2.new(1,0,0,20), BackgroundTransparency = 1, Text = title,
+        TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 15,
         TextXAlignment = Enum.TextXAlignment.Left}, f)
-    mk("Frame", {Size = UDim2.new(1,0,0,1), Position = UDim2.new(0,0,0,21),
+    mk("Frame", {Size = UDim2.new(1,0,0,1), Position = UDim2.new(0,0,0,24),
         BackgroundColor3 = HAIR, BorderSizePixel = 0}, f)
 end
 
 local function toggle(col, label, key, default)
-    local row = mk("Frame", {Size = UDim2.new(1,0,0,22), BackgroundTransparency = 1,
+    local row = mk("Frame", {Size = UDim2.new(1,0,0,30), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
     -- checkbox
-    local cb = mk("Frame", {Size = UDim2.new(0,13,0,13), Position = UDim2.new(0,2,0.5,-6),
-        BackgroundColor3 = BOX, BorderSizePixel = 0, Corner = 2, Stroke = true}, row)
-    local check = mk("Frame", {Size = UDim2.new(0,7,0,7), Position = UDim2.new(0.5,-3,0.5,-3),
-        BackgroundColor3 = WHITE, BorderSizePixel = 0, Corner = 1, Visible = false}, cb)
+    local cb = mk("Frame", {Size = UDim2.new(0,17,0,17), Position = UDim2.new(0,3,0.5,-8),
+        BackgroundColor3 = BOX, BorderSizePixel = 0, Corner = 4, Stroke = true}, row)
+    local check = mk("Frame", {Size = UDim2.new(0,10,0,10), Position = UDim2.new(0.5,-5,0.5,-5),
+        BackgroundColor3 = WHITE, BorderSizePixel = 0, Corner = 2, Visible = false}, cb)
     -- label
-    mk("TextLabel", {Size = UDim2.new(1,-70,1,0), Position = UDim2.new(0,20,0,0),
+    mk("TextLabel", {Size = UDim2.new(1,-76,1,0), Position = UDim2.new(0,27,0,0),
         BackgroundTransparency = 1, Text = label, TextColor3 = TXT,
-        Font = Enum.Font.Gotham, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Left,
+        Font = Enum.Font.Gotham, TextSize = 14, TextXAlignment = Enum.TextXAlignment.Left,
         TextTruncate = Enum.TextTruncate.AtEnd}, row)
     -- pill
-    local pill = mk("TextButton", {Size = UDim2.new(0,26,0,13), Position = UDim2.new(1,-28,0.5,-6),
-        BackgroundColor3 = OFF, Text = "", Corner = 7}, row)
-    local knob = mk("Frame", {Size = UDim2.new(0,11,0,11), Position = UDim2.new(0,1,0.5,-5),
-        BackgroundColor3 = WHITE, BorderSizePixel = 0, Corner = 6}, pill)
+    local pill = mk("TextButton", {Size = UDim2.new(0,38,0,19), Position = UDim2.new(1,-42,0.5,-9),
+        BackgroundColor3 = OFF, Text = "", Corner = 10}, row)
+    local knob = mk("Frame", {Size = UDim2.new(0,15,0,15), Position = UDim2.new(0,2,0.5,-7),
+        BackgroundColor3 = WHITE, BorderSizePixel = 0, Corner = 8}, pill)
     local function val()
         if S[key] == nil then return default end
         return S[key]
@@ -89,7 +89,7 @@ local function toggle(col, label, key, default)
         check.Visible = v
         pill.BackgroundColor3 = v and WHITE or OFF
         knob.BackgroundColor3 = v and BG or WHITE
-        knob.Position = v and UDim2.new(1,-12,0.5,-5) or UDim2.new(0,1,0.5,-5)
+        knob.Position = v and UDim2.new(1,-17,0.5,-7) or UDim2.new(0,2,0.5,-7)
     end
     local hit = mk("TextButton", {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 1,
         Text = ""}, row)
@@ -98,28 +98,28 @@ local function toggle(col, label, key, default)
 end
 
 local function dropdown(col, label, key, default, options)
-    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,40), BackgroundTransparency = 1,
+    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,50), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
-    mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
-        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
+    mk("TextLabel", {Size = UDim2.new(1,0,0,19), BackgroundTransparency = 1, Text = label,
+        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 14,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
-    local box = mk("TextButton", {Size = UDim2.new(1,0,0,21), Position = UDim2.new(0,0,0,17),
-        BackgroundColor3 = BOX, TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 12,
-        Text = "", Corner = 3, Stroke = true}, wrap)
-    local plus = mk("TextLabel", {Size = UDim2.new(0,20,1,0), Position = UDim2.new(1,-20,0,0),
+    local box = mk("TextButton", {Size = UDim2.new(1,0,0,27), Position = UDim2.new(0,0,0,21),
+        BackgroundColor3 = BOX, TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 14,
+        Text = "", Corner = 9, Stroke = true}, wrap)
+    local plus = mk("TextLabel", {Size = UDim2.new(0,26,1,0), Position = UDim2.new(1,-26,0,0),
         BackgroundTransparency = 1, Text = "+", TextColor3 = WHITE,
-        Font = Enum.Font.Gotham, TextSize = 13}, box)
+        Font = Enum.Font.Gotham, TextSize = 16}, box)
     local function cur() if S[key] == nil then return default end return S[key] end
     local function ref() box.Text = "   " .. tostring(cur()) end
-    local list = mk("Frame", {Size = UDim2.new(1,0,0,#options*20+8), BackgroundColor3 = PANEL,
-        BorderSizePixel = 0, Corner = 3, Stroke = true, Visible = false, ZIndex = 200}, wrap)
-    list.Position = UDim2.new(0,0,0,40)
+    local list = mk("Frame", {Size = UDim2.new(1,0,0,#options*28+8), BackgroundColor3 = PANEL,
+        BorderSizePixel = 0, Corner = 9, Stroke = true, Visible = false, ZIndex = 200}, wrap)
+    list.Position = UDim2.new(0,0,0,50)
     table.insert(popups, list)
     for i, opt in ipairs(options) do
-        local ob = mk("TextButton", {Size = UDim2.new(1,-6,0,19), Position = UDim2.new(0,3,0,4+(i-1)*20),
-            BackgroundColor3 = BOX, TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 11,
-            Text = tostring(opt), Corner = 2}, list)
+        local ob = mk("TextButton", {Size = UDim2.new(1,-8,0,26), Position = UDim2.new(0,4,0,4+(i-1)*28),
+            BackgroundColor3 = BOX, TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 13,
+            Text = tostring(opt), Corner = 7}, list)
         ob.MouseButton1Click:Connect(function() S[key] = opt; ref(); list.Visible = false end)
     end
     box.MouseButton1Click:Connect(function()
@@ -130,18 +130,18 @@ end
 
 local function slider(col, label, key, default, min, max, fmt)
     local f = fmt or function(v) return string.format("%.2f", v) end
-    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,40), BackgroundTransparency = 1,
+    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,50), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
-    mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
-        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
+    mk("TextLabel", {Size = UDim2.new(1,0,0,19), BackgroundTransparency = 1, Text = label,
+        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 14,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
-    local bar = mk("TextButton", {Size = UDim2.new(1,0,0,21), Position = UDim2.new(0,0,0,17),
-        BackgroundColor3 = BOX, Text = "", Corner = 3, Stroke = true}, wrap)
+    local bar = mk("TextButton", {Size = UDim2.new(1,0,0,27), Position = UDim2.new(0,0,0,21),
+        BackgroundColor3 = BOX, Text = "", Corner = 9, Stroke = true}, wrap)
     local fill = mk("Frame", {Size = UDim2.new(0.5,0,1,0), BackgroundColor3 = WHITE,
-        BorderSizePixel = 0, Corner = 3}, bar)
+        BorderSizePixel = 0, Corner = 9}, bar)
     local val = mk("TextLabel", {Size = UDim2.new(1,0,1,0), BackgroundTransparency = 1,
-        Text = "0", TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 11}, bar)
+        Text = "0", TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 13}, bar)
     local function cur() if S[key] == nil then return default end return S[key] end
     local function ref()
         local v = cur()
@@ -169,36 +169,36 @@ local function slider(col, label, key, default, min, max, fmt)
 end
 
 local function textbox(col, label, key, default, hint)
-    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,hint and 62 or 40), BackgroundTransparency = 1,
+    local wrap = mk("Frame", {Size = UDim2.new(1,0,0,hint and 78 or 50), BackgroundTransparency = 1,
         LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
-    mk("TextLabel", {Size = UDim2.new(1,0,0,15), BackgroundTransparency = 1, Text = label,
-        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 12,
+    mk("TextLabel", {Size = UDim2.new(1,0,0,19), BackgroundTransparency = 1, Text = label,
+        TextColor3 = TXT, Font = Enum.Font.Gotham, TextSize = 14,
         TextXAlignment = Enum.TextXAlignment.Left}, wrap)
-    local box = mk("TextBox", {Size = UDim2.new(1,0,0,21), Position = UDim2.new(0,0,0,17),
-        BackgroundColor3 = BOX, TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 11,
+    local box = mk("TextBox", {Size = UDim2.new(1,0,0,27), Position = UDim2.new(0,0,0,21),
+        BackgroundColor3 = BOX, TextColor3 = WHITE, Font = Enum.Font.Gotham, TextSize = 13,
         Text = tostring(S[key] or default), PlaceholderText = "", ClearTextOnFocus = false,
-        Corner = 3, Stroke = true}, wrap)
+        Corner = 9, Stroke = true}, wrap)
     box.FocusLost:Connect(function() S[key] = box.Text end)
     if hint then
-        mk("TextLabel", {Size = UDim2.new(1,0,0,20), Position = UDim2.new(0,2,0,40),
+        mk("TextLabel", {Size = UDim2.new(1,0,0,24), Position = UDim2.new(0,2,0,52),
             BackgroundTransparency = 1, Text = hint, TextColor3 = DIM,
-            Font = Enum.Font.Gotham, TextSize = 10,
+            Font = Enum.Font.Gotham, TextSize = 11,
             TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true}, wrap)
     end
 end
 
 local function button(col, label, cb)
-    local b = mk("TextButton", {Size = UDim2.new(1,0,0,24), BackgroundColor3 = BOX,
-        TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 12, Text = label,
-        Corner = 3, Stroke = true, LayoutOrder = ROW_O}, col)
+    local b = mk("TextButton", {Size = UDim2.new(1,0,0,34), BackgroundColor3 = BOX,
+        TextColor3 = WHITE, Font = Enum.Font.GothamBold, TextSize = 14, Text = label,
+        Corner = 9, Stroke = true, LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
     b.MouseButton1Click:Connect(function() cb() end)
 end
 
 local function note(col, text)
-    local f = mk("TextLabel", {Size = UDim2.new(1,0,0,16), BackgroundTransparency = 1,
-        Text = text, TextColor3 = DIM, Font = Enum.Font.Gotham, TextSize = 10,
+    local f = mk("TextLabel", {Size = UDim2.new(1,0,0,18), BackgroundTransparency = 1,
+        Text = text, TextColor3 = DIM, Font = Enum.Font.Gotham, TextSize = 12,
         TextXAlignment = Enum.TextXAlignment.Left, TextWrapped = true,
         AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = ROW_O}, col)
     ROW_O = ROW_O + 1
@@ -209,19 +209,19 @@ local CG = game:GetService("CoreGui")
 pcall(function() CG:FindFirstChild("DH4080"):Destroy() end)
 local gui = mk("ScreenGui", {Name = "DH4080", ResetOnSpawn = false,
     ZIndexBehavior = Enum.ZIndexBehavior.Sibling, DisplayOrder = 50}, CG)
-local main = mk("Frame", {Name = "Main", Size = UDim2.new(0, 660, 0, 480),
-    Position = UDim2.new(0.5, -330, 0.5, -240), BackgroundColor3 = WIN,
-    BorderSizePixel = 0, Corner = 6, Stroke = true}, gui)
+local main = mk("Frame", {Name = "Main", Size = UDim2.new(0, 900, 0, 620),
+    Position = UDim2.new(0.5, -450, 0.5, -310), BackgroundColor3 = WIN,
+    BorderSizePixel = 0, Corner = 16, Stroke = true}, gui)
 
 -- title bar
-local head = mk("Frame", {Size = UDim2.new(1,0,0,28), BackgroundColor3 = PANEL,
-    BorderSizePixel = 0, Corner = 6}, main)
-mk("TextLabel", {Size = UDim2.new(1,-70,1,0), Position = UDim2.new(0,10,0,0),
+local head = mk("Frame", {Size = UDim2.new(1,0,0,36), BackgroundColor3 = PANEL,
+    BorderSizePixel = 0, Corner = 16}, main)
+mk("TextLabel", {Size = UDim2.new(1,-80,1,0), Position = UDim2.new(0,14,0,0),
     BackgroundTransparency = 1, Text = "4080", TextColor3 = TXT,
-    Font = Enum.Font.GothamBlack, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left}, head)
-local hideB = mk("TextButton", {Size = UDim2.new(0,24,0,18), Position = UDim2.new(1,-30,0,5),
-    BackgroundColor3 = BOX, TextColor3 = TXT, Font = Enum.Font.GothamBold, TextSize = 11,
-    Text = "_", Corner = 3, Stroke = true}, head)
+    Font = Enum.Font.GothamBlack, TextSize = 17, TextXAlignment = Enum.TextXAlignment.Left}, head)
+local hideB = mk("TextButton", {Size = UDim2.new(0,32,0,24), Position = UDim2.new(1,-42,0,6),
+    BackgroundColor3 = BOX, TextColor3 = TXT, Font = Enum.Font.GothamBold, TextSize = 14,
+    Text = "—", Corner = 8, Stroke = true}, head)
 hideB.MouseButton1Click:Connect(function() main.Visible = false end)
 
 -- drag
@@ -240,14 +240,14 @@ UIS.InputEnded:Connect(function(i)
 end)
 
 -- sidebar
-local side = mk("Frame", {Size = UDim2.new(0, 112, 1, -36), Position = UDim2.new(0, 6, 0, 32),
-    BackgroundColor3 = PANEL, BorderSizePixel = 0, Corner = 4}, main)
-local slay = Instance.new("UIListLayout") slay.Padding = UDim.new(0,3) slay.Parent = side
-local spad = mk("UIPadding", {PaddingLeft = UDim.new(0,6), PaddingRight = UDim.new(0,6),
-    PaddingTop = UDim.new(0,6), PaddingBottom = UDim.new(0,6)}, side)
+local side = mk("Frame", {Size = UDim2.new(0, 150, 1, -46), Position = UDim2.new(0, 8, 0, 42),
+    BackgroundColor3 = PANEL, BorderSizePixel = 0, Corner = 12}, main)
+local slay = Instance.new("UIListLayout") slay.Padding = UDim.new(0,5) slay.Parent = side
+local spad = mk("UIPadding", {PaddingLeft = UDim.new(0,8), PaddingRight = UDim.new(0,8),
+    PaddingTop = UDim.new(0,8), PaddingBottom = UDim.new(0,8)}, side)
 
 -- content area
-local content = mk("Frame", {Size = UDim2.new(1, -126, 1, -36), Position = UDim2.new(0, 124, 0, 32),
+local content = mk("Frame", {Size = UDim2.new(1, -174, 1, -50), Position = UDim2.new(0, 166, 0, 42),
     BackgroundTransparency = 1}, main)
 local pages = {}
 local sideBtns = {}
@@ -263,18 +263,18 @@ local function show(tab)
 end
 
 for i, tab in ipairs(TABS) do
-    local b = mk("TextButton", {LayoutOrder = i, Size = UDim2.new(1,0,0,30),
+    local b = mk("TextButton", {LayoutOrder = i, Size = UDim2.new(1,0,0,40),
         BackgroundColor3 = i == 1 and WHITE or BOX,
         TextColor3 = i == 1 and BG or TXT,
-        Font = Enum.Font.GothamBold, TextSize = 12, Text = tab, Corner = 4}, side)
+        Font = Enum.Font.GothamBold, TextSize = 14, Text = tab, Corner = 10}, side)
     sideBtns[tab] = b
     local pg = mk("ScrollingFrame", {Name = tab, Size = UDim2.new(1,0,1,0),
         BackgroundTransparency = 1, ScrollBarThickness = 3, ScrollBarImageColor3 = WHITE,
         AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(0,0,0,0),
         Visible = i == 1}, content)
-    local lay = Instance.new("UIListLayout") lay.Padding = UDim.new(0,3) lay.Parent = pg
-    local pad = mk("UIPadding", {PaddingLeft = UDim.new(0,4), PaddingRight = UDim.new(0,6),
-        PaddingTop = UDim.new(0,2)}, pg)
+    local lay = Instance.new("UIListLayout") lay.Padding = UDim.new(0,5) lay.Parent = pg
+    local pad = mk("UIPadding", {PaddingLeft = UDim.new(0,6), PaddingRight = UDim.new(0,8),
+        PaddingTop = UDim.new(0,4)}, pg)
     pages[tab] = pg
     b.MouseButton1Click:Connect(function() show(tab) end)
 end
@@ -287,11 +287,11 @@ local function twoCol(tab)
     local L = mk("ScrollingFrame", {Size = UDim2.new(0.5,-4,1,0), BackgroundTransparency = 1,
         ScrollBarThickness = 3, ScrollBarImageColor3 = WHITE,
         AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(0,0,0,0)}, holder)
-    local ll = Instance.new("UIListLayout") ll.Padding = UDim.new(0,3) ll.Parent = L
+    local ll = Instance.new("UIListLayout") ll.Padding = UDim.new(0,5) ll.Parent = L
     local R = mk("ScrollingFrame", {Size = UDim2.new(0.5,-4,1,0), Position = UDim2.new(0.5,4,0,0),
         BackgroundTransparency = 1, ScrollBarThickness = 3, ScrollBarImageColor3 = WHITE,
         AutomaticCanvasSize = Enum.AutomaticSize.Y, CanvasSize = UDim2.new(0,0,0,0)}, holder)
-    local rl = Instance.new("UIListLayout") rl.Padding = UDim.new(0,3) rl.Parent = R
+    local rl = Instance.new("UIListLayout") rl.Padding = UDim.new(0,5) rl.Parent = R
     return holder, L, R
 end
 
